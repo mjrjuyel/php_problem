@@ -58,7 +58,7 @@
                       'car_name' => 'Ford',
                   ),
                   array(
-                      'id' => 013,
+                      'id' => 13,
                       'country' => 'Germany',
                       'car_name' => 'Volkswagen',
                   ),
