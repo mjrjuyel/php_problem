@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.4/main.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.4/main.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <div id="calendar"></div>
+    <script>
+        $(document).ready(function () {
+            // Fetch submitted dates
+            $.ajax({
+                url: 'get_submitted_dates.php', // Replace with your PHP script
+                method: 'GET',
+                success: function (data) {
+                    const submittedDates = JSON.parse(data);
+                    const events = submittedDates.map(date => ({
+                        start: date,
+                        display: 'background',
+                        backgroundColor: 'green'
+                    }));
+
+                    const calendar = new FullCalendar.Calendar(document.getElementById('calendar'), {
+                        initialView: 'dayGridMonth',
+                        dateClick: function (info) {
+                            const clickedDate = info.dateStr;
+                            const today = new Date().toISOString().split('T')[0];
+                            const threeDaysAgo = new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
+
+                            if (clickedDate < threeDaysAgo || clickedDate > today || submittedDates.includes(clickedDate)) {
+                                alert('You cannot select this date.');
+                            } else {
+                                // Proceed with report submission logic
+                                alert('Submit report for ' + clickedDate);
+                            }
+                        },
+                        events: events
+                    });
+
+                    calendar.render();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
